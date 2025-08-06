@@ -3,8 +3,8 @@
 ![Last Commit](https://img.shields.io/github/last-commit/davedonnellydev/ai-august-2025-05)  
 
 **📆 Date**: 07/Aug/2025  
-**🎯 Project Objective**: Paste/upload your CV, get AI-generated feedback and tips.   
-**🚀 Features**: Upload pdf of paste resume text; AI to analyse and critique; Highlight suggestions  
+**🎯 Project Objective**: Paste/upload your CV, get AI-generated feedback and tips. 
+**🚀 Features**: Upload pdf or paste resume text; AI to analyse and critique; Have a 'rewrite' button where AI can rewrite your CV for you. Stretch goals: have the UI highlight areas for improvement and/or create diffs between original text and AI changes?     
 **🛠️ Tech used**: Next.js, TypeScript, OpenAI API  
 **▶️ Live Demo**: *[https://your-demo-url.com](https://your-demo-url.com)*  
 *(Link will be added after deployment)*  
