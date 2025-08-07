@@ -1,0 +1,14 @@
+.title {
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+    font-size: rem(50px);
+    font-weight: 600;
+    letter-spacing: rem(-2px);
+
+    @media (max-width: var(--mantine-breakpoint-md)) {
+      font-size: rem(50px);
+    }
+  }
+
+  .main {
+    min-height: calc(100dvh - var(--app-shell-header-height));
+  }

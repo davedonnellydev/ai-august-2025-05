@@ -1,0 +1,22 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.analysisContent {
+  background: var(--mantine-color-body);
+}
+
+.responseText {
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.responseText p {
+  margin-bottom: 1rem;
+}
+
+.responseText p:last-child {
+  margin-bottom: 0;
+}

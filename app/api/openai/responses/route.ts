@@ -17,12 +17,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { input } = await request.json();
+    const { inputText, fileId } = await request.json();
 
-    // Enhanced validation
-    const textValidation = InputValidator.validateText(input, 2000);
-    if (!textValidation.isValid) {
-      return NextResponse.json({ error: textValidation.error }, { status: 400 });
+    // Validate that either input or fileId is provided
+    if (!inputText && !fileId) {
+      return NextResponse.json({ error: 'Either input text or file ID must be provided' }, { status: 400 });
+    }
+
+    // Enhanced validation for text input
+    if (inputText) {
+      const textValidation = InputValidator.validateText(inputText, 2000);
+      if (!textValidation.isValid) {
+        return NextResponse.json({ error: textValidation.error }, { status: 400 });
+      }
     }
 
     // Environment validation
@@ -39,34 +46,55 @@ export async function POST(request: NextRequest) {
       apiKey,
     });
 
-    // Enhanced content moderation
-    const moderatedText = await client.moderations.create({
-      input,
-    });
+    // Enhanced content moderation for text input
+    if (inputText) {
+      const moderatedText = await client.moderations.create({
+        input: inputText,
+      });
 
-    const { flagged, categories } = moderatedText.results[0];
+      const { flagged, categories } = moderatedText.results[0];
 
-    if (flagged) {
-      const keys: string[] = Object.keys(categories);
-      const flaggedCategories = keys.filter(
-        (key: string) => categories[key as keyof typeof categories]
-      );
-      return NextResponse.json(
-        {
-          error: `Content flagged as inappropriate: ${flaggedCategories.join(', ')}`,
-        },
-        { status: 400 }
-      );
+      if (flagged) {
+        const keys: string[] = Object.keys(categories);
+        const flaggedCategories = keys.filter(
+          (key: string) => categories[key as keyof typeof categories]
+        );
+        return NextResponse.json(
+          {
+            error: `Content flagged as inappropriate: ${flaggedCategories.join(', ')}`,
+          },
+          { status: 400 }
+        );
+      }
     }
 
     const instructions: string =
-      'You are a helpful assistant who knows general knowledge about the world. Keep your responses to one or two sentances, maximum.';
+      'You are a helpful assistant who analyzes CV content. Provide a brief analysis of the CV, highlighting key skills, experience, and suggestions for improvement. Keep your response concise and professional.';
 
-    const response = await client.responses.create({
+    const responseData: any = {
       model: MODEL,
       instructions,
-      input,
-    });
+      input: [{
+        role: "user",
+        content: []
+      }]
+    };
+
+    if (inputText) {
+      responseData.input[0].content.push({
+        type: "text",
+        text: inputText
+        })
+    };
+
+    if (fileId) {
+        responseData.input[0].content.push({
+            type: "input_file",
+            file_id: fileId
+            })
+    };
+
+    const response = await client.responses.create(responseData);
 
     if (response.status !== 'completed') {
       throw new Error(`Responses API error: ${response.status}`);
@@ -74,7 +102,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       response: response.output_text || 'Response recieved',
-      originalInput: input,
+      originalInput: inputText || fileId,
       remainingRequests: ServerRateLimiter.getRemaining(ip),
     });
   } catch (error) {

@@ -1,0 +1,12 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.container :global(.mantine-Textarea-root) {
+  margin-bottom: 1rem;
+}
+
+.container :global(.mantine-FileInput-root) {
+  margin-bottom: 1rem;
+}

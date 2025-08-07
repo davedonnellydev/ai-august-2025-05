@@ -1,0 +1,1 @@
+export { UploadCV } from './UploadCV';
