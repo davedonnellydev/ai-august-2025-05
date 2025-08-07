@@ -1,7 +1,7 @@
 'use client';
 
-import { Paper, Text, Button, Stack, Alert, Group, Badge } from '@mantine/core';
-import { IconArrowLeft, IconFileText, IconCheck } from '@tabler/icons-react';
+import { IconArrowLeft, IconCheck, IconFileText } from '@tabler/icons-react';
+import { Alert, Badge, Button, Group, Paper, Stack, Text } from '@mantine/core';
 import styles from './DisplayAnalysis.module.css';
 
 interface DisplayAnalysisProps {
@@ -22,11 +22,7 @@ export function DisplayAnalysis({ analysisResult, onReset }: DisplayAnalysisProp
           <Text size="xl" fw={600}>
             CV Analysis Results
           </Text>
-          <Button
-            variant="outline"
-            leftSection={<IconArrowLeft size={16} />}
-            onClick={onReset}
-          >
+          <Button variant="outline" leftSection={<IconArrowLeft size={16} />} onClick={onReset}>
             Analyze Another CV
           </Button>
         </Group>

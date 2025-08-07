@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     // Upload file to OpenAI
     const uploadedFile = await client.files.create({
-      file: file,
+      file,
       purpose: 'user_data',
     });
 

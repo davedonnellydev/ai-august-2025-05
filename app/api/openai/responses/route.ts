@@ -21,7 +21,10 @@ export async function POST(request: NextRequest) {
 
     // Validate that either input or fileId is provided
     if (!inputText && !fileId) {
-      return NextResponse.json({ error: 'Either input text or file ID must be provided' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Either input text or file ID must be provided' },
+        { status: 400 }
+      );
     }
 
     // Enhanced validation for text input
@@ -74,25 +77,27 @@ export async function POST(request: NextRequest) {
     const responseData: any = {
       model: MODEL,
       instructions,
-      input: [{
-        role: "user",
-        content: []
-      }]
+      input: [
+        {
+          role: 'user',
+          content: [],
+        },
+      ],
     };
 
     if (inputText) {
       responseData.input[0].content.push({
-        type: "text",
-        text: inputText
-        })
-    };
+        type: 'text',
+        text: inputText,
+      });
+    }
 
     if (fileId) {
-        responseData.input[0].content.push({
-            type: "input_file",
-            file_id: fileId
-            })
-    };
+      responseData.input[0].content.push({
+        type: 'input_file',
+        file_id: fileId,
+      });
+    }
 
     const response = await client.responses.create(responseData);
 

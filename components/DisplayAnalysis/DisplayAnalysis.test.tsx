@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
+import { render } from '@/test-utils';
 import { DisplayAnalysis } from './DisplayAnalysis';
 
 describe('DisplayAnalysis', () => {

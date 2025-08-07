@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { Button, Textarea, FileInput, Paper, Stack, Text, Group, Alert } from '@mantine/core';
-import { IconUpload, IconFileText, IconAnalyze } from '@tabler/icons-react';
+import { useRef, useState } from 'react';
+import { IconAnalyze, IconFileText, IconUpload } from '@tabler/icons-react';
+import { Alert, Button, FileInput, Group, Paper, Stack, Text, Textarea } from '@mantine/core';
 import styles from './UploadCV.module.css';
 
 interface UploadCVProps {
@@ -14,7 +14,7 @@ export function UploadCV({ onAnalysisComplete, onError }: UploadCVProps) {
   const [inputMode, setInputMode] = useState<'text' | 'file'>('text');
   const [textInput, setTextInput] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadedFile, setUploadedFile] = useState<any>(null);
+  const [_uploadedFile, setUploadedFile] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLButtonElement>(null);
@@ -62,9 +62,9 @@ export function UploadCV({ onAnalysisComplete, onError }: UploadCVProps) {
         }
 
         // Upload file to OpenAI first
-        const uploadedFile = await uploadFileToOpenAI(selectedFile);
-        setUploadedFile(uploadedFile);
-        fileId = uploadedFile.id;
+        const uploadedFileObject = await uploadFileToOpenAI(selectedFile);
+        setUploadedFile(uploadedFileObject);
+        fileId = uploadedFileObject.id;
       } else if (inputMode === 'text') {
         input = textInput.trim();
         if (!input) {
@@ -75,8 +75,12 @@ export function UploadCV({ onAnalysisComplete, onError }: UploadCVProps) {
       }
 
       const requestBody: any = {};
-      if (input) requestBody.inputText = input;
-      if (fileId) requestBody.fileId = fileId;
+      if (input) {
+        requestBody.inputText = input;
+      }
+      if (fileId) {
+        requestBody.fileId = fileId;
+      }
 
       const response = await fetch('/api/openai/responses', {
         method: 'POST',
